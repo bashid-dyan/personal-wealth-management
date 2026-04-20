@@ -16,11 +16,23 @@ import {
 import type { RRGSeries } from '@/lib/rrg'
 import { QUADRANT_META, quadrantOf } from '@/lib/rrg'
 
-// Deterministic per-ticker color (cycled palette).
+// Deterministic per-ticker color — pastel palette (cheerful, low-saturation).
 const TICKER_PALETTE = [
-  '#16A34A', '#2563EB', '#CA8A04', '#DC2626', '#7C3AED',
-  '#0891B2', '#DB2777', '#EA580C', '#059669', '#4F46E5',
-  '#B45309', '#9333EA', '#0EA5E9', '#65A30D', '#E11D48',
+  '#F9A8D4', // pink
+  '#93C5FD', // sky
+  '#FCD34D', // lemon
+  '#86EFAC', // mint
+  '#C4B5FD', // lavender
+  '#FDBA74', // peach
+  '#67E8F9', // aqua
+  '#FCA5A5', // coral
+  '#A7F3D0', // seafoam
+  '#DDD6FE', // lilac
+  '#FDE68A', // butter
+  '#A5B4FC', // periwinkle
+  '#FBCFE8', // rose
+  '#BEF264', // lime
+  '#99F6E4', // teal
 ]
 
 function colorForTicker(idx: number): string {

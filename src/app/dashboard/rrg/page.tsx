@@ -290,10 +290,10 @@ export default function RRGPage() {
           <div className="s-card p-4">
             <p className="caps mb-3">Arti Kuadran</p>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-sm">
-              <QLegend color="#16A34A" name="Leading" desc="Kuat & momentum positif — outperform benchmark" />
-              <QLegend color="#CA8A04" name="Weakening" desc="Masih kuat tapi momentum melemah" />
-              <QLegend color="#DC2626" name="Lagging" desc="Lemah & momentum negatif — underperform" />
-              <QLegend color="#2563EB" name="Improving" desc="Masih lemah tapi mulai membaik" />
+              <QLegend color="#86EFAC" name="Leading" desc="Kuat & momentum positif — outperform benchmark" />
+              <QLegend color="#FDE68A" name="Weakening" desc="Masih kuat tapi momentum melemah" />
+              <QLegend color="#FDA4AF" name="Lagging" desc="Lemah & momentum negatif — underperform" />
+              <QLegend color="#BFDBFE" name="Improving" desc="Masih lemah tapi mulai membaik" />
             </div>
             <p className="text-[11px] mt-3" style={{ color: 'var(--ink-muted)' }}>
               Rotasi normal (searah jarum jam): Improving → Leading → Weakening → Lagging → Improving.

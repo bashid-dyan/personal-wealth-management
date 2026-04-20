@@ -167,8 +167,8 @@ export function quadrantOf(p: { rsRatio: number; rsMomentum: number }): Quadrant
 }
 
 export const QUADRANT_META: Record<Quadrant, { label: string; color: string; bg: string }> = {
-  leading:   { label: 'Leading',   color: '#16A34A', bg: 'rgba(22, 163, 74, 0.10)' },
-  weakening: { label: 'Weakening', color: '#CA8A04', bg: 'rgba(202, 138, 4, 0.10)' },
-  lagging:   { label: 'Lagging',   color: '#DC2626', bg: 'rgba(220, 38, 38, 0.10)' },
-  improving: { label: 'Improving', color: '#2563EB', bg: 'rgba(37, 99, 235, 0.10)' },
+  leading:   { label: 'Leading',   color: '#10B981', bg: 'rgba(167, 243, 208, 0.45)' }, // mint
+  weakening: { label: 'Weakening', color: '#F59E0B', bg: 'rgba(253, 230, 138, 0.50)' }, // lemon
+  lagging:   { label: 'Lagging',   color: '#F43F5E', bg: 'rgba(254, 202, 202, 0.45)' }, // blush
+  improving: { label: 'Improving', color: '#3B82F6', bg: 'rgba(191, 219, 254, 0.50)' }, // sky
 }
