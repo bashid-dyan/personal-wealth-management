@@ -187,21 +187,36 @@ export default function EmergencyFundPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-teal-600" />
-        <span className="ml-2 text-gray-500">Memuat data...</span>
+        <Loader2 className="size-6 animate-spin" style={{ color: 'var(--burgundy-700)' }} />
+        <span className="ml-2" style={{ color: 'var(--ink-muted)' }}>Memuat data...</span>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Shield className="size-6 text-teal-600" />
-          Dana Darurat
-        </h1>
-        <p className="text-sm text-gray-500">{today}</p>
+      <div className="dark-card p-6 sm:p-7">
+        <div className="flex items-end gap-4 flex-wrap">
+          <div className="flex-1 min-w-0">
+            <p className="caps">Proteksi Finansial</p>
+            <div className="mt-2 flex items-end gap-3">
+              <Shield className="h-7 w-7" style={{ color: 'var(--lime-400)' }} />
+              <h2 className="text-white text-3xl sm:text-4xl font-semibold tracking-tight">
+                Dana Darurat
+              </h2>
+            </div>
+            <p className="text-sm mt-2" style={{ color: 'var(--on-black-mut)' }}>{today}</p>
+          </div>
+          <div
+            className="rounded-lg px-5 py-3 border"
+            style={{ background: 'var(--black-2)', borderColor: 'var(--black-line)' }}
+          >
+            <p className="caps">Progress</p>
+            <p className="num mt-1 text-2xl font-semibold" style={{ color: 'var(--lime-400)' }}>
+              {progressPercent}%
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Two-column layout */}
@@ -209,7 +224,7 @@ export default function EmergencyFundPage() {
         {/* Left Column - Calculator */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-teal-700">Kalkulator Dana Darurat</CardTitle>
+            <CardTitle className="font-serif" style={{ color: 'var(--burgundy-700)' }}>Kalkulator Dana Darurat</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Job Stability */}
@@ -258,13 +273,13 @@ export default function EmergencyFundPage() {
             </div>
 
             {/* Recommendation */}
-            <div className="rounded-lg bg-teal-50 p-4 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm font-medium text-gray-600">Rekomendasi (IDR):</span>
-                <span className="font-semibold text-teal-700">{formatCurrency(recommendation)}</span>
+            <div className="rounded-lg p-4 space-y-1 border" style={{ backgroundColor: 'var(--indigo-50)', borderColor: 'var(--indigo-100)' }}>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium" style={{ color: 'var(--ink-muted)' }}>Rekomendasi</span>
+                <span className="text-sm font-semibold tabular" style={{ color: 'var(--indigo-700)' }}>{formatCurrency(recommendation)}</span>
               </div>
-              <p className="text-xs text-gray-500">
-                {multiplier}x pengeluaran bulanan
+              <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>
+                {multiplier}× pengeluaran bulanan
               </p>
             </div>
 
@@ -282,22 +297,25 @@ export default function EmergencyFundPage() {
             </div>
 
             {/* Accumulated */}
-            <div className="flex justify-between py-2 border-t">
-              <span className="text-sm font-medium text-gray-600">Dana Terkumpul:</span>
-              <span className="font-semibold text-teal-700">{formatCurrency(accumulatedFund)}</span>
+            <div className="flex items-center justify-between py-2 border-t" style={{ borderColor: 'var(--border-soft)' }}>
+              <span className="text-sm font-medium" style={{ color: 'var(--ink-muted)' }}>Dana Terkumpul</span>
+              <span className="text-sm font-semibold tabular" style={{ color: 'var(--ink)' }}>{formatCurrency(accumulatedFund)}</span>
             </div>
 
             {/* Deficit */}
-            <div className="flex justify-between py-2 border-t">
-              <span className="text-sm font-medium text-gray-600">Kekurangan Dana:</span>
-              <span className={`font-semibold ${deficit > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+            <div className="flex items-center justify-between py-2 border-t" style={{ borderColor: 'var(--border-soft)' }}>
+              <span className="text-sm font-medium" style={{ color: 'var(--ink-muted)' }}>Kekurangan Dana</span>
+              <span
+                className="text-sm font-semibold tabular"
+                style={{ color: deficit > 0 ? 'var(--danger)' : 'var(--emerald-600)' }}
+              >
                 {formatCurrency(Math.abs(deficit))}
                 {deficit <= 0 && ' (Tercapai)'}
               </span>
             </div>
 
             <Button
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+              className="w-full"
               onClick={handleSaveSettings}
               disabled={saving}
             >
@@ -310,10 +328,10 @@ export default function EmergencyFundPage() {
         {/* Right Column - Locations */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-teal-700">Lokasi Dana Darurat</CardTitle>
+            <CardTitle className="font-serif" style={{ color: 'var(--burgundy-700)' }}>Lokasi Dana Darurat</CardTitle>
             <Button
               size="sm"
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className=""
               onClick={openAddLocation}
               disabled={!fund}
             >
@@ -323,7 +341,7 @@ export default function EmergencyFundPage() {
           </CardHeader>
           <CardContent>
             {!fund ? (
-              <p className="text-sm text-gray-400 text-center py-6">
+              <p className="text-sm text-center py-6" style={{ color: 'var(--ink-soft)' }}>
                 Simpan pengaturan terlebih dahulu untuk menambahkan lokasi dana.
               </p>
             ) : (
@@ -338,7 +356,7 @@ export default function EmergencyFundPage() {
                 <TableBody>
                   {locations.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={3} className="text-center text-gray-400 py-6">
+                      <TableCell colSpan={3} className="text-center py-6" style={{ color: 'var(--ink-soft)' }}>
                         Belum ada lokasi dana darurat.
                       </TableCell>
                     </TableRow>
@@ -356,7 +374,7 @@ export default function EmergencyFundPage() {
                               size="icon-sm"
                               onClick={() => openEditLocation(loc)}
                             >
-                              <Pencil className="size-4 text-gray-500" />
+                              <Pencil className="size-4" style={{ color: 'var(--ink-muted)' }} />
                             </Button>
                             <Button
                               variant="ghost"
@@ -436,7 +454,7 @@ export default function EmergencyFundPage() {
               Batal
             </Button>
             <Button
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className=""
               onClick={handleSaveLocation}
               disabled={saving}
             >

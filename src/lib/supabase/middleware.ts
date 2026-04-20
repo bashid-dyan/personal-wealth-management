@@ -1,7 +1,24 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const isDemo =
+  (process.env.NEXT_PUBLIC_DEMO_MODE ?? '').trim() === 'true' ||
+  !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 export async function updateSession(request: NextRequest) {
+  // Demo mode: bypass all auth. If someone hits /login or /register, push them
+  // into the dashboard so they can see the UI without registering.
+  if (isDemo) {
+    const path = request.nextUrl.pathname
+    if (path.startsWith('/login') || path.startsWith('/register')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
+    }
+    return NextResponse.next({ request })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })

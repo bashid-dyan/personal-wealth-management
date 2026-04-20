@@ -3,12 +3,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { useT } from '@/lib/i18n/context'
+import { LanguageToggle } from '@/components/layout/language-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User, Mail, Lock } from 'lucide-react'
+import { User, Mail, Lock, Sparkles } from 'lucide-react'
 
 export default function RegisterPage() {
+  const t = useT()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -21,27 +24,17 @@ export default function RegisterPage() {
     setError(null)
     setSuccess(false)
     setLoading(true)
-
     try {
       const supabase = createClient()
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
+        options: { data: { full_name: fullName } },
       })
-
-      if (error) {
-        setError(error.message)
-        return
-      }
-
+      if (error) { setError(error.message); return }
       setSuccess(true)
     } catch {
-      setError('Terjadi kesalahan. Silakan coba lagi.')
+      setError(t('auth.error_generic'))
     } finally {
       setLoading(false)
     }
@@ -49,76 +42,137 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
-      {/* Left Hero/Branding Section */}
-      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 px-8 py-12 lg:w-[60%] lg:py-0">
-        {/* Floating abstract shapes */}
-        <div className="animate-float absolute left-[10%] top-[20%] h-64 w-64 rounded-full bg-teal-500/20 blur-3xl" />
-        <div className="animate-float-delayed absolute bottom-[15%] right-[10%] h-80 w-80 rounded-full bg-cyan-500/15 blur-3xl" />
-        <div className="animate-pulse-glow absolute left-[50%] top-[60%] h-40 w-40 rounded-full bg-teal-400/10 blur-3xl" />
+      <div
+        className="relative flex w-full flex-col items-center justify-center overflow-hidden px-8 py-16 lg:w-[55%] lg:py-0"
+        style={{
+          background:
+            'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 55%, #7C3AED 100%)',
+        }}
+      >
+        <div
+          className="animate-float absolute left-[10%] top-[18%] h-64 w-64 rounded-full blur-3xl"
+          style={{ backgroundColor: 'rgba(139, 92, 246, 0.35)' }}
+        />
+        <div
+          className="animate-float-delayed absolute bottom-[12%] right-[8%] h-80 w-80 rounded-full blur-3xl"
+          style={{ backgroundColor: 'rgba(6, 182, 212, 0.28)' }}
+        />
 
-        <div className="relative z-10 text-center">
-          <h1 className="text-6xl font-extrabold tracking-tight text-white drop-shadow-[0_0_30px_rgba(20,184,166,0.4)] lg:text-8xl">
+        <div className="relative z-10 max-w-md text-center text-white">
+          <div
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl font-bold text-lg"
+            style={{
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255,255,255,0.20)',
+            }}
+          >
             PWM
+          </div>
+
+          <h1 className="mt-6 text-4xl font-bold leading-tight lg:text-5xl">
+            Mulai perjalanan
+            <br />
+            <span
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #67E8F9, #A5B4FC)',
+              }}
+            >
+              finansial Anda
+            </span>
           </h1>
-          <p className="mt-4 text-xl font-semibold text-teal-200 lg:text-2xl">
-            Personal Wealth Management
+          <p
+            className="mt-5 text-sm lg:text-base leading-relaxed"
+            style={{ color: 'rgba(255,255,255,0.75)' }}
+          >
+            Daftar gratis. Bangun disiplin pencatatan, monitor investasi,
+            dan raih tujuan finansial lebih cepat.
           </p>
-          <p className="mt-3 max-w-md text-sm text-slate-400 lg:text-base">
-            Kelola keuangan pribadi Anda dengan mudah dan terstruktur
-          </p>
+          <div className="mt-8 flex justify-center gap-3">
+            {['Dashboard real-time', 'Live quote saham', 'Analisa utang'].map((chip) => (
+              <span
+                key={chip}
+                className="pill"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.10)',
+                  color: '#A5B4FC',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  padding: '0.25rem 0.75rem',
+                }}
+              >
+                <Sparkles className="h-3 w-3" />
+                {chip}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Right Form Section */}
-      <div className="flex w-full items-center justify-center bg-white px-6 py-12 dark:bg-slate-950 lg:w-[40%] lg:px-12">
+      <div
+        className="flex w-full items-center justify-center px-6 py-12 lg:w-[45%] lg:px-12"
+        style={{ backgroundColor: 'var(--surface)' }}
+      >
         <div className="w-full max-w-sm">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-foreground">
-              Buat Akun Baru
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Daftar untuk mulai mengelola keuangan Anda
-            </p>
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <p className="caps">{t('auth.register_page')}</p>
+              <h2 className="text-2xl font-semibold mt-1" style={{ color: 'var(--ink)' }}>
+                {t('auth.create_account')}
+              </h2>
+              <p className="mt-1 text-sm" style={{ color: 'var(--ink-muted)' }}>
+                {t('auth.register_description')}
+              </p>
+            </div>
+            <LanguageToggle />
           </div>
 
-          <form onSubmit={handleRegister} className="flex flex-col gap-5">
+          <form onSubmit={handleRegister} className="flex flex-col gap-4">
             {error && (
-              <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
+              <div
+                className="flex items-center gap-2 rounded-lg border p-3 text-sm"
+                style={{
+                  backgroundColor: 'var(--danger-bg)',
+                  borderColor: '#FECDD3',
+                  color: 'var(--danger)',
+                }}
+              >
                 {error}
               </div>
             )}
             {success && (
-              <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-600 dark:border-green-800 dark:bg-green-950/50 dark:text-green-400">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Registrasi berhasil! Silakan cek email Anda.
+              <div
+                className="flex items-center gap-2 rounded-lg border p-3 text-sm"
+                style={{
+                  backgroundColor: 'var(--success-bg)',
+                  borderColor: '#A7F3D0',
+                  color: 'var(--emerald-700)',
+                }}
+              >
+                {t('auth.success_register')}
               </div>
             )}
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="fullName">Nama Lengkap</Label>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="fullName">{t('auth.full_name')}</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: 'var(--ink-soft)' }} />
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="Masukkan nama lengkap"
+                  placeholder="Nama Lengkap"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="h-12 rounded-xl pl-10"
+                  className="h-11 pl-10"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: 'var(--ink-soft)' }} />
                 <Input
                   id="email"
                   type="email"
@@ -126,24 +180,24 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12 rounded-xl pl-10"
+                  className="h-11 pl-10"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Kata Sandi</Label>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: 'var(--ink-soft)' }} />
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Buat kata sandi"
+                  placeholder="Minimal 6 karakter"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="h-12 rounded-xl pl-10"
+                  className="h-11 pl-10"
                 />
               </div>
             </div>
@@ -151,18 +205,15 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={loading || success}
-              className="mt-2 h-12 w-full rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-base font-semibold text-white shadow-lg transition-all hover:from-teal-600 hover:to-cyan-600 hover:shadow-xl"
+              className="mt-2 h-11 w-full text-sm font-medium"
             >
-              {loading ? 'Memproses...' : 'Daftar'}
+              {loading ? t('auth.processing') : t('auth.register_button')}
             </Button>
 
-            <p className="text-center text-sm text-muted-foreground">
-              Sudah punya akun?{' '}
-              <Link
-                href="/login"
-                className="font-semibold text-teal-600 transition-colors hover:text-teal-700 hover:underline"
-              >
-                Masuk
+            <p className="text-center text-sm" style={{ color: 'var(--ink-muted)' }}>
+              {t('auth.have_account')}{' '}
+              <Link href="/login" className="font-semibold hover:underline" style={{ color: 'var(--indigo-600)' }}>
+                {t('auth.login_link')}
               </Link>
             </p>
           </form>
