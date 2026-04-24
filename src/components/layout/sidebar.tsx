@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Receipt, Wallet, Building2, CreditCard, Shield,
   TrendingUp, ChevronDown, LogOut, Repeat, Target, Calculator,
-  Coins, Clock, Sparkles, Gift, ListOrdered, Compass,
+  Coins, Clock, Sparkles, Gift, ListOrdered, Compass, FileClock,
 } from 'lucide-react'
 import { NAV_ITEMS, NAV_SECTIONS, type NavItem } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
@@ -20,6 +20,7 @@ import type { User } from '@supabase/supabase-js'
 const topIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, Receipt, Wallet, Building2, CreditCard, Shield, TrendingUp,
   Repeat, Target, Calculator, Coins, Clock, Sparkles, Gift, ListOrdered, Compass,
+  FileClock,
 }
 
 interface SidebarProps {

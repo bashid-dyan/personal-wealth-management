@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { formatCurrency, getMonthName } from '@/lib/utils'
 import { MONTHS } from '@/lib/constants'
 import { useT } from '@/lib/i18n/context'
-import type { Transaction, Investment, CreditCard } from '@/types'
+import type { Transaction, Investment, CreditCard, Contract } from '@/types'
 
 import {
   Select,
@@ -78,6 +78,7 @@ export default function DashboardPage() {
   const [investments, setInvestments] = useState<Investment[]>([])
   const [monthBudgets, setMonthBudgets] = useState<Budget[]>([])
   const [creditCards, setCreditCards] = useState<CreditCard[]>([])
+  const [contracts, setContracts] = useState<Contract[]>([])
   const [liquidTotal, setLiquidTotal] = useState(0)
   const [debtTotal, setDebtTotal] = useState(0)
   const [emergencyFundCurrent, setEmergencyFundCurrent] = useState(0)
@@ -98,7 +99,7 @@ export default function DashboardPage() {
     const endYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear
     const endDate = `${endYear}-${String(endMonth).padStart(2, '0')}-01`
 
-    const [yearRes, invRes, budgetRes, ccRes, liqRes, debtRes, efRes] = await Promise.all([
+    const [yearRes, invRes, budgetRes, ccRes, liqRes, debtRes, efRes, ctrRes] = await Promise.all([
       supabase
         .from('transactions')
         .select('*')
@@ -135,6 +136,12 @@ export default function DashboardPage() {
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle(),
+      supabase
+        .from('contracts')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_archived', false)
+        .order('end_date', { ascending: true }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setLiquidTotal(((liqRes.data ?? []) as any[]).reduce((s, a) => s + (a.balance ?? 0), 0))
@@ -151,6 +158,7 @@ export default function DashboardPage() {
     setInvestments((invRes.data ?? []) as Investment[])
     setMonthBudgets((budgetRes.data ?? []) as Budget[])
     setCreditCards((ccRes.data ?? []) as CreditCard[])
+    setContracts((ctrRes.data ?? []) as Contract[])
     setLoading(false)
   }
 
@@ -425,6 +433,7 @@ export default function DashboardPage() {
         yearTransactions={yearTransactions}
         monthBudgets={monthBudgets}
         creditCards={creditCards}
+        contracts={contracts}
         savingRate={totals.savingRate}
         netCashflow={totals.net}
       />
@@ -757,17 +766,36 @@ function SavingRateRing({
 
 // ─── Insights & Alerts Panel ───
 function InsightsPanel({
-  monthTransactions, yearTransactions, monthBudgets, creditCards, savingRate, netCashflow,
+  monthTransactions, yearTransactions, monthBudgets, creditCards, contracts, savingRate, netCashflow,
 }: {
   monthTransactions: Transaction[]
   yearTransactions: Transaction[]
   monthBudgets: Budget[]
   creditCards: CreditCard[]
+  contracts: Contract[]
   savingRate: number
   netCashflow: number
 }) {
   const alerts: Array<{ level: 'critical' | 'warn' | 'good'; text: string }> = []
   const today = new Date()
+
+  // Contract expiries (overdue + within reminder window)
+  for (const c of contracts) {
+    const end = new Date(c.end_date); end.setHours(0, 0, 0, 0)
+    const t = new Date(today); t.setHours(0, 0, 0, 0)
+    const days = Math.round((end.getTime() - t.getTime()) / 86_400_000)
+    if (days < 0) {
+      alerts.push({
+        level: 'critical',
+        text: `Kontrak "${c.name}" lewat jatuh tempo ${Math.abs(days)} hari`,
+      })
+    } else if (days <= c.reminder_days_before) {
+      alerts.push({
+        level: days <= 7 ? 'critical' : 'warn',
+        text: `Kontrak "${c.name}" jatuh tempo ${days === 0 ? 'hari ini' : `${days} hari lagi`}`,
+      })
+    }
+  }
 
   // Upcoming CC due dates (< 7 days)
   for (const c of creditCards) {

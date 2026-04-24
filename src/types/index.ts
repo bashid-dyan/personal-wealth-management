@@ -248,3 +248,31 @@ export interface NetWorthSnapshot {
   net_worth: number
   created_at: string
 }
+
+export type ContractCategory =
+  | 'insurance'
+  | 'subscription'
+  | 'loan'
+  | 'warranty'
+  | 'lease'
+  | 'other'
+
+export type ContractFrequency = 'monthly' | 'quarterly' | 'yearly' | 'one_time'
+
+export interface Contract {
+  id: string
+  user_id: string
+  name: string
+  category: ContractCategory
+  provider: string
+  policy_number: string
+  start_date: string | null
+  end_date: string
+  cost: number | null
+  frequency: ContractFrequency | null
+  auto_renew: boolean
+  reminder_days_before: number
+  is_archived: boolean
+  notes: string
+  created_at: string
+}

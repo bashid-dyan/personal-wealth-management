@@ -293,6 +293,24 @@ const profiles = [
 // Transfers
 const transfers: unknown[] = []
 
+// Contracts — demo set covers every status (overdue/expiring/upcoming/archived)
+const contracts = (() => {
+  const now = today
+  const addDays = (n: number) => {
+    const d = new Date(now); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10)
+  }
+  return [
+    { id: uid('ctr', 1), user_id: DEMO_USER_ID, name: 'Asuransi Mobil Allianz', category: 'insurance',    provider: 'Allianz',         policy_number: 'MV-2024-88123', start_date: '2025-06-01', end_date: addDays(18),   cost: 8_500_000,  frequency: 'yearly',    auto_renew: false, reminder_days_before: 30, is_archived: false, notes: 'All Risk, deductible Rp 500rb',   created_at: '2025-06-01' },
+    { id: uid('ctr', 2), user_id: DEMO_USER_ID, name: 'Asuransi Kesehatan Keluarga', category: 'insurance', provider: 'Prudential',      policy_number: 'PRU-4471',      start_date: '2025-01-15', end_date: addDays(265),  cost: 18_000_000, frequency: 'yearly',    auto_renew: true,  reminder_days_before: 30, is_archived: false, notes: '',                                 created_at: '2025-01-15' },
+    { id: uid('ctr', 3), user_id: DEMO_USER_ID, name: 'Netflix Premium',           category: 'subscription', provider: 'Netflix',        policy_number: '',              start_date: '2024-09-01', end_date: addDays(9),    cost: 186_000,    frequency: 'monthly',   auto_renew: true,  reminder_days_before: 14, is_archived: false, notes: 'Shared dengan istri',              created_at: '2024-09-01' },
+    { id: uid('ctr', 4), user_id: DEMO_USER_ID, name: 'Spotify Family',            category: 'subscription', provider: 'Spotify',        policy_number: '',              start_date: '2025-02-10', end_date: addDays(45),   cost: 89_000,     frequency: 'monthly',   auto_renew: true,  reminder_days_before: 7,  is_archived: false, notes: '',                                 created_at: '2025-02-10' },
+    { id: uid('ctr', 5), user_id: DEMO_USER_ID, name: 'KPR BCA Rumah Utama',       category: 'loan',         provider: 'BCA',             policy_number: 'KPR-BCA-2019-0012', start_date: '2019-03-01', end_date: '2034-03-01',  cost: 7_200_000,  frequency: 'monthly',   auto_renew: false, reminder_days_before: 60, is_archived: false, notes: 'Tenor 15 tahun',                   created_at: '2019-03-01' },
+    { id: uid('ctr', 6), user_id: DEMO_USER_ID, name: 'Garansi TV Samsung',        category: 'warranty',     provider: 'Samsung',         policy_number: 'WR-2024-55219', start_date: '2024-12-12', end_date: addDays(-5),   cost: null,        frequency: null,        auto_renew: false, reminder_days_before: 30, is_archived: false, notes: 'Simpan struk',                     created_at: '2024-12-12' },
+    { id: uid('ctr', 7), user_id: DEMO_USER_ID, name: 'Sewa Ruko Proyek',          category: 'lease',        provider: 'Pemilik Ruko',    policy_number: '',              start_date: '2025-01-01', end_date: addDays(128),  cost: 75_000_000, frequency: 'yearly',    auto_renew: false, reminder_days_before: 60, is_archived: false, notes: 'Kontrak 1 tahun',                  created_at: '2025-01-01' },
+    { id: uid('ctr', 8), user_id: DEMO_USER_ID, name: 'Asuransi Jiwa lama',        category: 'insurance',    provider: 'AXA Mandiri',     policy_number: '',              start_date: '2020-06-01', end_date: '2025-06-01',  cost: 6_000_000,  frequency: 'yearly',    auto_renew: false, reminder_days_before: 30, is_archived: true,  notes: 'Sudah ganti ke Prudential',        created_at: '2020-06-01' },
+  ]
+})()
+
 export const demoStore: Record<string, unknown[]> = {
   profiles,
   accounts,
@@ -317,4 +335,5 @@ export const demoStore: Record<string, unknown[]> = {
   categorization_rules,
   stock_transactions,
   ihsg_snapshots,
+  contracts,
 }
